@@ -37,12 +37,14 @@ SDK's own service worker).
 
 ### 2. Provide a service worker
 
-From `JunePushSw.ts` (or the compiled `dist/JunePushSw.js` in this package),
-the customer builds their own `public/junePushSw.js` – either by directly
-copying/bundling the file, or by re-exporting it if the build process allows
-that. The path `/junePushSw.js` is fixed in the SDK.
+`dist/JunePushSw.js` in this package is a fully self-contained bundle
+(Firebase included, no build step required) – the customer copies it
+directly as their `public/junePushSw.js`. The path `/junePushSw.js` is
+fixed in the SDK.
 
 ### 3. Initialize the SDK
+
+**With npm/a bundler:**
 
 ```ts
 import { JunePushSDK } from '@juneapp/push-sdk-web';
@@ -56,6 +58,25 @@ sdk.listenToForegroundMessages((data) => {
   console.log('Foreground message:', data);
 });
 ```
+
+**Without npm, directly via `<script>` tag:** `dist/JunePushSDK.js` is a UMD
+bundle (Firebase included) – it works the same way as the snippet above when
+imported, and also attaches itself to `window.JunePushSDK` when loaded as a
+plain script, no build step needed:
+
+```html
+<script src="/junePushSDK.js"></script>
+<script>
+  const sdk = new JunePushSDK({});
+  sdk.register().then((token) => console.log('Token:', token));
+</script>
+```
+
+Note: since Firebase is bundled into `dist/JunePushSDK.js` and
+`dist/JunePushSw.js`, a customer who also loads their own separate Firebase
+instance on the same page (for unrelated features) ends up with two
+independent Firebase copies. That's fine in practice, just something to be
+aware of.
 
 ## API
 
