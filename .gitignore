@@ -5,3 +5,4 @@ dist/
 *.log
 .idea/
 .git.old-with-domain-in-history/
+RELEASE-INTERNAL.md
