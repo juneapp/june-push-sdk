@@ -17,8 +17,16 @@
   "peerDependencies": {
     "firebase": "^10.0.0 || ^11.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juneapp/june-push-sdk.git",
+    "directory": "packages/web"
+  },
+  "bugs": {
+    "url": "https://github.com/juneapp/june-push-sdk/issues"
+  },
+  "homepage": "https://github.com/juneapp/june-push-sdk/tree/main/packages/web#readme",
   "publishConfig": {
-    "access": "restricted",
-    "registry": "https://YOUR-PRIVATE-REGISTRY/"
+    "access": "public"
   }
 }

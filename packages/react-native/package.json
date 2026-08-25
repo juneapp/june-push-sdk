@@ -21,9 +21,17 @@
     "react": "*",
     "react-native": "*"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juneapp/june-push-sdk.git",
+    "directory": "packages/react-native"
+  },
+  "bugs": {
+    "url": "https://github.com/juneapp/june-push-sdk/issues"
+  },
+  "homepage": "https://github.com/juneapp/june-push-sdk/tree/main/packages/react-native#readme",
   "publishConfig": {
-    "access": "restricted",
-    "registry": "https://YOUR-PRIVATE-REGISTRY/"
+    "access": "public"
   },
   "devDependencies": {
     "@react-native-async-storage/async-storage": "^1.24.0"

@@ -11,8 +11,16 @@
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juneapp/june-push-sdk.git",
+    "directory": "packages/shared"
+  },
+  "bugs": {
+    "url": "https://github.com/juneapp/june-push-sdk/issues"
+  },
+  "homepage": "https://github.com/juneapp/june-push-sdk/tree/main/packages/shared#readme",
   "publishConfig": {
-    "access": "restricted",
-    "registry": "https://YOUR-PRIVATE-REGISTRY/"
+    "access": "public"
   }
 }
