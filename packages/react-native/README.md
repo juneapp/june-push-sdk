@@ -1,42 +1,42 @@
 # @juneapp/push-sdk-react-native
 
-React-Native-SDK für June Push Notifications (`@react-native-firebase/messaging`).
+React Native SDK for JUNE Push Notifications (`@react-native-firebase/messaging`).
 
-## Voraussetzungen beim Kunden
+## Prerequisites on the customer side
 
-Der Kunde muss selbst:
+The customer needs to:
 
-1. Ein Firebase-Projekt anlegen und die App dort registrieren.
-2. `GoogleService-Info.plist` (iOS) bzw. `google-services.json` (Android) ins
-   native Projekt einbinden.
-3. `@react-native-firebase/app` und `@react-native-firebase/messaging`
-   installieren (Peer-Dependencies dieses Pakets) und `pod install` /
-   Gradle-Sync ausführen.
-4. Auf iOS: Push-Notifications-Capability + APNs-Key in der Firebase Console
-   hinterlegen (das ist erfahrungsgemäß der Teil mit dem meisten
-   Setup-Aufwand – siehe die offizielle
-   [@react-native-firebase/messaging-Doku](https://rnfirebase.io/messaging/usage)).
+1. Create a Firebase project and register the app there.
+2. Add `GoogleService-Info.plist` (iOS) or `google-services.json` (Android)
+   to the native project.
+3. Install `@react-native-firebase/app` and `@react-native-firebase/messaging`
+   (peer dependencies of this package) and run `pod install` / a Gradle
+   sync.
+4. On iOS: enable the Push Notifications capability and add an APNs key in
+   the Firebase console (in practice this is usually the part with the most
+   setup effort – see the official
+   [@react-native-firebase/messaging docs](https://rnfirebase.io/messaging/usage)).
 
-Dieses SDK übernimmt ab dem Punkt, an dem Firebase in der App initialisiert ist.
+This SDK takes over from the point where Firebase has been initialized in the app.
 
-## Nutzung
+## Usage
 
 ```ts
 import { JunePushSDK } from '@juneapp/push-sdk-react-native';
 
 const sdk = new JunePushSDK({
-  collectToken: 'DEIN_COLLECT_TOKEN', // gleicher Wert wie bei der Web-Integration
-  apiBaseUrl: 'https://DEINE-BACKEND-URL', // Pflichtfeld, kein Standardwert
+  collectToken: 'YOUR_COLLECT_TOKEN', // same value as in the web integration
+  apiBaseUrl: 'https://YOUR-BACKEND-URL', // required, no default value
 });
 
-// z. B. in einem Onboarding-Screen
+// e.g. in an onboarding screen
 const token = await sdk.register();
 
-// z. B. im App-Root, einmalig
+// e.g. once, at the app root
 useEffect(() => {
   const unsubscribeForeground = sdk.listenToForegroundMessages((data) => {
     if (data.banner_html) {
-      // eigenes In-App-Banner mit data.banner_html anzeigen
+      // show your own in-app banner using data.banner_html
     }
   });
 
@@ -51,19 +51,19 @@ useEffect(() => {
 
 ## API
 
-- `register(): Promise<string | null>` – Permission anfragen, FCM-Token holen, Token im Backend speichern.
-- `unsubscribe(unsubscribeLink: string): Promise<boolean>` – meldet den Kontakt über den in der Nachricht mitgeschickten `data.unsubscribe_click_link` ab und meldet den FCM-Token auch lokal ab.
-- `watchPermissionRevocation(): () => void` – prüft bei jedem App-Vordergrund-Wechsel, ob Push für die App deaktiviert wurde, und meldet dann automatisch über den zuletzt bekannten `unsubscribe_click_link` ab. Gibt eine Funktion zum Entfernen des Listeners zurück.
-- `registerBackgroundHandler(): void` – muss in `index.js` auf Modul-Ebene stehen, vor `AppRegistry.registerComponent()` (Voraussetzung von `@react-native-firebase/messaging`). Cacht `unsubscribe_click_link` und `banner_html` aus Nachrichten, die eintreffen, während die App im Hintergrund oder beendet ist.
-- `consumePendingBanner(): Promise<string | null>` – liest `banner_html` aus einer Hintergrund-Nachricht und löscht ihn danach aus dem Cache; für die einmalige Anzeige beim nächsten Vordergrund-Wechsel gedacht.
-- `listenToForegroundMessages(callback)` – Nachrichten im Vordergrund abfangen (App ist offen). Feuert automatisch Open-Tracking.
-- `listenToNotificationOpen(callback?)` – Tap auf die System-Notification abfangen (Hintergrund oder kalter Start). Feuert Open-Tracking und öffnet automatisch `tracking_click_link`.
+- `register(): Promise<string | null>` – requests permission, gets an FCM token, stores the token in the backend.
+- `unsubscribe(unsubscribeLink: string): Promise<boolean>` – unsubscribes the contact via the `data.unsubscribe_click_link` included in the message, and also unsubscribes the FCM token locally.
+- `watchPermissionRevocation(): () => void` – checks, every time the app comes to the foreground, whether push has been disabled for the app, and if so automatically unsubscribes via the most recently known `unsubscribe_click_link`. Returns a function to remove the listener.
+- `registerBackgroundHandler(): void` – must be called at module scope in `index.js`, before `AppRegistry.registerComponent()` (a requirement of `@react-native-firebase/messaging`). Caches `unsubscribe_click_link` and `banner_html` from messages that arrive while the app is backgrounded or terminated.
+- `consumePendingBanner(): Promise<string | null>` – reads `banner_html` from a background message and then clears it from the cache; intended to be shown once the next time the app comes to the foreground.
+- `listenToForegroundMessages(callback)` – intercepts messages received in the foreground (app is open). Automatically fires open tracking.
+- `listenToNotificationOpen(callback?)` – intercepts taps on the system notification (from the background or a cold start). Fires open tracking and automatically opens `tracking_click_link`.
 
-## Was dieses SDK nicht übernimmt
+## What this SDK doesn't handle
 
-Die Anzeige der System-Notification selbst (Title/Body/Bild) läuft über das
-Betriebssystem, gesteuert durch den `notification`/`apns.alert`-Block eurer
-Push-Payload – nicht über dieses SDK. Für "garantiertes" Tracking exakt beim
-Anzeigen (statt beim Öffnen) wäre zusätzlich eine native Notification Service
-Extension (iOS) bzw. eine Umstellung auf Data-Only-Messages (Android) nötig –
-bewusst nicht Teil dieses SDKs.
+Rendering the system notification itself (title/body/image) is handled by
+the operating system, driven by the `notification`/`apns.alert` block of
+your push payload – not by this SDK. "Guaranteed" tracking exactly at
+display time (rather than at open time) would additionally require a
+native Notification Service Extension (iOS) or a switch to data-only
+messages (Android) – deliberately not part of this SDK.

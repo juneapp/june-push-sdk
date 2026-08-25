@@ -1,5 +1,5 @@
 /**
- * June Push SDK – React Native Variante
+ * JUNE Push SDK – React Native Variante
  *
  * Spiegelt bewusst die API der Web-Variante (@juneapp/push-sdk-web):
  * gleiche Methodennamen, gleiche Datenfelder (siehe @juneapp/push-sdk-shared),

@@ -1,14 +1,14 @@
 # @juneapp/push-sdk-web
 
-Web-SDK für June Push Notifications (Firebase Cloud Messaging).
+Web SDK for JUNE Push Notifications (Firebase Cloud Messaging).
 
-## Setup beim Kunden
+## Setup on the customer side
 
-### 1. Firebase-Config bereitstellen
+### 1. Provide the Firebase config
 
-Diese Datei gehört **nicht** zum Paket – sie enthält eure kundenspezifischen
-Firebase-Zugangsdaten und muss vom Kunden selbst im Web-Root abgelegt werden
-(z. B. `public/junePushConfig.js`):
+This file is **not** part of the package – it contains your customer-specific
+Firebase credentials and must be placed by the customer themselves in the
+web root (e.g. `public/junePushConfig.js`):
 
 ```js
 var config = {
@@ -30,39 +30,40 @@ if (typeof self !== "undefined") {
 }
 ```
 
-Diese Datei muss sowohl im Hauptdokument (per `<script src="/junePushConfig.js">`)
-als auch für den Service Worker erreichbar sein (`importScripts('/junePushConfig.js')`
-passiert automatisch im SDK-eigenen Service Worker).
+This file must be reachable both from the main document (via
+`<script src="/junePushConfig.js">`) and from the service worker
+(`importScripts('/junePushConfig.js')` happens automatically inside the
+SDK's own service worker).
 
-### 2. Service Worker bereitstellen
+### 2. Provide a service worker
 
-Der Kunde baut aus `JunePushSw.ts` (bzw. der kompilierten `dist/JunePushSw.js`
-aus diesem Paket) seine eigene `public/junePushSw.js` – entweder durch direktes
-Kopieren/Bundlen der Datei, oder durch einen Re-Export, falls der Build-Prozess
-das erlaubt. Der Pfad `/junePushSw.js` ist im SDK fix hinterlegt.
+From `JunePushSw.ts` (or the compiled `dist/JunePushSw.js` in this package),
+the customer builds their own `public/junePushSw.js` – either by directly
+copying/bundling the file, or by re-exporting it if the build process allows
+that. The path `/junePushSw.js` is fixed in the SDK.
 
-### 3. SDK initialisieren
+### 3. Initialize the SDK
 
 ```ts
 import { JunePushSDK } from '@juneapp/push-sdk-web';
 
 const sdk = new JunePushSDK({});
-// collectToken/vapidKey werden automatisch aus window.__JUNE_PUSH_CONFIG__ gelesen
+// collectToken/vapidKey are read automatically from window.__JUNE_PUSH_CONFIG__
 
 const token = await sdk.register();
 
 sdk.listenToForegroundMessages((data) => {
-  console.log('Nachricht im Vordergrund:', data);
+  console.log('Foreground message:', data);
 });
 ```
 
 ## API
 
-- `register(): Promise<string | null>` – Service Worker registrieren, Permission/Token holen, Token im Backend speichern. Nutzt einen lokalen Cache, um bei bereits erfolgter Registrierung unnötige Backend-Aufrufe zu vermeiden.
-- `getSubscriptionStatus(): "denied" | "subscribed" | "unsubscribed"` – aktueller Status ohne Netzwerk-Aufruf, z. B. um einen Anmelden-/Abmelden-Button zu rendern.
-- `unsubscribe(unsubscribeLink: string): Promise<boolean>` – meldet den Kontakt über den in der Nachricht mitgeschickten `data.unsubscribe_click_link` ab und meldet den Push-Token auch lokal beim Browser ab.
-- `watchPermissionRevocation(): Promise<void>` – meldet automatisch ab, wenn die Nutzer:in die Push-Berechtigung über die Browser-Einstellungen widerruft (nutzt den zuletzt über eine Nachricht empfangenen `unsubscribe_click_link`).
-- `getUnsubscribeLink(): Promise<string | null>` – zuletzt gecachter Abmelde-Link, unabhängig vom aktuellen Seitenaufruf.
-- `consumePendingBanner(): Promise<string | null>` – liest `banner_html` aus einer Hintergrund-Nachricht (Tab war beim Empfang nicht sichtbar) und löscht ihn danach aus dem Cache; für die einmalige Anzeige beim nächsten Öffnen/Fokussieren der Seite gedacht.
-- `listenToForegroundMessages(callback)` – Nachrichten im Vordergrund abfangen, zeigt automatisch eine Browser-Notification (außer `disablePushNotificationInForeground: true`).
-- `initWorker()` – Alias für `register()`.
+- `register(): Promise<string | null>` – registers the service worker, requests permission/token, and stores the token in the backend. Uses a local cache to avoid unnecessary backend calls once registration has already succeeded.
+- `getSubscriptionStatus(): "denied" | "subscribed" | "unsubscribed"` – current status without a network call, e.g. to render a subscribe/unsubscribe button.
+- `unsubscribe(unsubscribeLink: string): Promise<boolean>` – unsubscribes the contact via the `data.unsubscribe_click_link` included in the message, and also unsubscribes the push token locally in the browser.
+- `watchPermissionRevocation(): Promise<void>` – automatically unsubscribes when the user revokes push permission via the browser settings (uses the `unsubscribe_click_link` most recently received in a message).
+- `getUnsubscribeLink(): Promise<string | null>` – the most recently cached unsubscribe link, independent of the current page load.
+- `consumePendingBanner(): Promise<string | null>` – reads `banner_html` from a background message (the tab wasn't visible when it arrived) and then clears it from the cache; intended to be shown once the next time the page is opened/focused.
+- `listenToForegroundMessages(callback)` – intercepts messages received in the foreground and automatically shows a browser notification (unless `disablePushNotificationInForeground: true`).
+- `initWorker()` – alias for `register()`.

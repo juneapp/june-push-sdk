@@ -1,5 +1,5 @@
 /**
- * Gemeinsame Typen für Web- und React-Native-Variante des June Push SDK.
+ * Gemeinsame Typen für Web- und React-Native-Variante des JUNE Push SDK.
  * Ziel: beide Plattform-Pakete sprechen dieselbe "Sprache" (gleiche
  * Konfigurationsfelder, gleicher Nachrichten-Datenvertrag), auch wenn der
  * jeweilige Code plattformbedingt unterschiedlich implementiert ist.

@@ -1,7 +1,7 @@
 {
   "name": "@juneapp/push-sdk-react-native",
-  "version": "0.1.0",
-  "description": "June Push SDK für React Native (@react-native-firebase/messaging).",
+  "version": "0.1.1",
+  "description": "JUNE Push SDK for React Native (@react-native-firebase/messaging).",
   "main": "dist/JunePushSDK.js",
   "types": "dist/JunePushSDK.d.ts",
   "files": [

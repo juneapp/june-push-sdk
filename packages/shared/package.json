@@ -1,7 +1,7 @@
 {
   "name": "@juneapp/push-sdk-shared",
-  "version": "0.1.0",
-  "description": "Gemeinsame TypeScript-Interfaces für die June Push SDKs (Web, React Native).",
+  "version": "0.1.1",
+  "description": "Shared TypeScript interfaces for the JUNE Push SDKs (Web, React Native).",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
