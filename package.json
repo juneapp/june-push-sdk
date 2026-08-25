@@ -1,7 +1,7 @@
 {
   "name": "june-push-sdks",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Monorepo for the JUNE Push SDKs (Web, React Native) + shared types.",
   "workspaces": [
     "packages/*"
