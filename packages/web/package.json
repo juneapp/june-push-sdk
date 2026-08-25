@@ -1,0 +1,24 @@
+{
+  "name": "@juneapp/push-sdk-web",
+  "version": "0.1.0",
+  "description": "June Push SDK für Web (Firebase Cloud Messaging + eigener Service Worker).",
+  "main": "dist/JunePushSDK.js",
+  "types": "dist/JunePushSDK.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.sw.json",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@juneapp/push-sdk-shared": "^0.1.0"
+  },
+  "peerDependencies": {
+    "firebase": "^10.0.0 || ^11.0.0"
+  },
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://YOUR-PRIVATE-REGISTRY/"
+  }
+}

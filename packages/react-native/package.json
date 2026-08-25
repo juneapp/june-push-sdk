@@ -1,0 +1,31 @@
+{
+  "name": "@juneapp/push-sdk-react-native",
+  "version": "0.1.0",
+  "description": "June Push SDK für React Native (@react-native-firebase/messaging).",
+  "main": "dist/JunePushSDK.js",
+  "types": "dist/JunePushSDK.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@juneapp/push-sdk-shared": "^0.1.0"
+  },
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": "^1.0.0 || ^2.0.0 || ^3.0.0",
+    "@react-native-firebase/app": "^21.0.0 || ^22.0.0",
+    "@react-native-firebase/messaging": "^21.0.0 || ^22.0.0",
+    "react": "*",
+    "react-native": "*"
+  },
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://YOUR-PRIVATE-REGISTRY/"
+  },
+  "devDependencies": {
+    "@react-native-async-storage/async-storage": "^1.24.0"
+  }
+}
